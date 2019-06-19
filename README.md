@@ -37,7 +37,7 @@ When prompted, check the box that states infrastructure will be created and clic
 Once the template finishes running you can expand the “Outputs” section to find the Role ARN and external ID values.
 
 
-# You should submit the values below back to Alert Logic:
+# You should submit the values below back to Alert Logic
 •	CID (Alert Logic account ID)
 •	Alert Logic account name
 •	Kinesis Stream ARNs for both log and ids streams
