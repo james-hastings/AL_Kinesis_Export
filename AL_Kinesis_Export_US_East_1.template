@@ -1,0 +1,182 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "70be1ab6-6da6-4111-9c87-3dfd059b340b": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 170,
+                    "y": 100
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "aa2d2beb-d43f-4bdd-a396-e7b35f4de33d": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 170,
+                    "y": 220
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "01ecd57d-fbdd-4a7f-8182-659d3e1b1df7": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 550,
+                    "y": 160
+                },
+                "z": 0,
+                "embeds": [],
+                "dependson": [
+                    "70be1ab6-6da6-4111-9c87-3dfd059b340b",
+                    "aa2d2beb-d43f-4bdd-a396-e7b35f4de33d"
+                ]
+            }
+        }
+    },
+    "Resources": {
+        "KS1QHVI": {
+            "Type": "AWS::Kinesis::Stream",
+            "Properties": {
+                "Name": "alertlogic_kinesis_ids",
+                "RetentionPeriodHours": 24,
+                "ShardCount": 1
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "70be1ab6-6da6-4111-9c87-3dfd059b340b"
+                }
+            }
+        },
+        "KS4RSXL": {
+            "Type": "AWS::Kinesis::Stream",
+            "Properties": {
+                "Name": "alertlogic_kinesis_log",
+                "RetentionPeriodHours": 24,
+                "ShardCount": 1
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "aa2d2beb-d43f-4bdd-a396-e7b35f4de33d"
+                }
+            }
+        },
+        "ALKinesisPublishIntegration": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Policies": [
+                    {
+                        "PolicyName": "ALKinesisPublishIntegration",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Sid": "Stmt1457725389000",
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "kinesis:DescribeStream",
+                                        "kinesis:PutRecords"
+                                    ],
+                                    "Resource": [
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    "arn:aws:kinesis:us-east-1",
+                                                    ":",
+                                                    {
+                                                        "Ref": "AWS::AccountId"
+                                                    },
+                                                    ":stream/alertlogic_kinesis_log"
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    "arn:aws:kinesis:us-east-1",
+                                                    ":",
+                                                    {
+                                                        "Ref": "AWS::AccountId"
+                                                    },
+                                                    ":stream/alertlogic_kinesis_ids"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Path": "/",
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Principal": {
+                                "AWS": [
+                                    "arn:aws:iam::733251395267:role/us-east-1-global-services-ingestex",
+                                    "arn:aws:iam::948063967832:role/us-east-1-global-integration-ingestex"
+                            ]
+                            },
+                            "Effect": "Allow",
+                            "Condition": {
+                                "StringEquals": {
+                                    "sts:ExternalId": {
+                                        "Ref": "ExternalId"
+                                    }
+                                }
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "01ecd57d-fbdd-4a7f-8182-659d3e1b1df7"
+                }
+            },
+            "DependsOn": [
+                "KS1QHVI",
+                "KS4RSXL"
+            ]
+        }
+    },
+    "Parameters": {
+        "ExternalId": {
+            "Type": "String",
+            "MinLength": "2",
+            "Description": "An external ID identifies Alert Logic as allowed access to the AWS resources defined in this IAM Role."
+        }
+    },
+    "Outputs": {
+        "RoleARN": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "ALKinesisPublishIntegration",
+                    "Arn"
+                ]
+            },
+            "Description": "Role ARN"
+        },
+        "ExternalId": {
+            "Value": {
+                "Ref": "ExternalId"
+            },
+            "Description": "An external ID identifies Alert Logic as allowed access to the AWS resources defined in this IAM Role."
+        }
+    }
+}
