@@ -2,6 +2,7 @@
 Export AL IDS data and logs to AWS Kinesis.
 
 
+
 # Overview
 
 This document covers implementing the AL Kinesis Export CloudFormation template in your environment as well as the information you need to provide back to Alert Logic to get real-time AL data published.
@@ -15,6 +16,8 @@ The additional metric necessary is considered “enhanced” and does incur addi
 Documentation on monitoring Kinesis metrics via CloudWatch is available here: 
 
 https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html#kinesis-metrics-shard
+
+
 
 
 # Running the CloudFormation Template
@@ -33,12 +36,15 @@ When prompted, check the box that states infrastructure will be created and clic
 
 Once the template finishes running you can expand the “Outputs” section to find the Role ARN and external ID values.
 
+
 # You should submit the values below back to Alert Logic:
 •	CID (Alert Logic account ID)
 •	Alert Logic account name
 •	Kinesis Stream ARNs for both log and ids streams
 •	IAM Role ARN
 •	External ID value
+
+
 
 
 
@@ -56,6 +62,8 @@ Click on the edit button, and then select “WriteProvisionedThroughputExceeded�
 If you have additional Streams, go back and do this process for each stream you would like to monitor.
 
 The new metric can take up to a few hours to populate and become usable in the next step where a CloudWatch alarm is setup to provide automatic notification when the shard throughput is exceeded and needs attention.
+
+
 
 
 
