@@ -1,4 +1,6 @@
 # AL_Kinesis_Export
+
+[![Git](https://app.soluble.cloud/api/v1/public/badges/54bcd14a-d8ef-4203-b000-bfe7cd6d5761.svg?orgId=367099919619)](https://app.soluble.cloud/repos/details/github.com/james-hastings/al_kinesis_export?orgId=367099919619)  
 Export AL IDS data and logs to AWS Kinesis.
 
 
